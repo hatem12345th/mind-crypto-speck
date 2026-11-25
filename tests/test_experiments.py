@@ -1,8 +1,9 @@
 """
-Unit and integration tests for Part 1 upgrades:
+Unit and integration tests for MIND-Crypt experiment pipelines:
 - Gohr cyclic LR, model checkpointing save/load
 - XGBoost Appendix D hyperparameter tuning
-- Experiment A & B end-to-end orchestration and reporting
+- Experiment A & B orchestration and reporting
+- Experiment C Gohr differential generator and round sweep
 """
 
 import os
