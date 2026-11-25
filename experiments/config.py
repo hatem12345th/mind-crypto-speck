@@ -29,6 +29,7 @@ class ExperimentConfig:
     data_dir: str = 'data'
     checkpoint_dir: str = 'checkpoints'
     results_dir: str = 'results'
+    results_tag: str = 'results'
 
     # Cipher & plaintext settings (Section 5.1)
     rounds: List[int] = field(default_factory=lambda: list(PAPER_ROUNDS))

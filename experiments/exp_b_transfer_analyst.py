@@ -175,8 +175,8 @@ def run_experiment_b(
 
     save_results(
         all_records,
-        json_path=os.path.join(cfg.results_dir, 'exp_b_results.json'),
-        csv_path=os.path.join(cfg.results_dir, 'exp_b_results.csv'),
+        json_path=os.path.join(cfg.results_dir, f'exp_b_{cfg.results_tag}.json'),
+        csv_path=os.path.join(cfg.results_dir, f'exp_b_{cfg.results_tag}.csv'),
     )
 
     if verbose:

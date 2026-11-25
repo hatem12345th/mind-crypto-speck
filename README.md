@@ -76,6 +76,9 @@ python run_all.py --profile standard
 
 # Full paper TransferAnalyst scaling (5k..290k per class) + Appendix D XGBoost tuning
 python run_all.py --profile paper --tune
+
+# Sweep ALL rounds from 1 to 22 (CBC DeepAnalyst + TransferAnalyst + Gohr Differential)
+python run_all.py --profile quick --all-rounds --tl-sizes 10000 --run-gohr
 ```
 
 ---

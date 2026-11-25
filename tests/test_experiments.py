@@ -20,10 +20,12 @@ from models.resnet_distinguisher import (
     train_model,
 )
 from transfer.xgboost_eval import train_and_eval_xgboost
+from crypto.gohr_generator import generate_gohr_differential_dataset
 from experiments.config import ExperimentConfig
 from experiments.dataset_builder import ensure_all_datasets, load_dataset_splits
 from experiments.exp_a_deep_analyst import run_experiment_a
 from experiments.exp_b_transfer_analyst import run_experiment_b
+from experiments.exp_c_gohr_sweep import run_experiment_c_gohr
 
 
 class TestModelUpgrades(unittest.TestCase):
@@ -139,6 +141,33 @@ class TestExperimentPipeline(unittest.TestCase):
             self.assertEqual(len(exp_b_rows), 12)
             self.assertTrue(os.path.exists(os.path.join(cfg.results_dir, 'exp_b_results.csv')))
             self.assertTrue(os.path.exists(os.path.join(cfg.results_dir, 'exp_b_results.json')))
+
+
+class TestGohrSweep(unittest.TestCase):
+
+    def test_gohr_generator_and_sweep(self):
+        d = generate_gohr_differential_dataset(n_samples=200, rounds=5, seed=42)
+        self.assertEqual(d['X'].shape, (200, 64))
+        self.assertEqual(d['Y'].shape, (200,))
+        self.assertEqual(int(np.sum(d['Y'] == 0)), 100)
+        self.assertEqual(int(np.sum(d['Y'] == 1)), 100)
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            cfg = ExperimentConfig(
+                results_dir=os.path.join(tmpdir, 'results'),
+                results_tag='gohr_test',
+                rounds=[1, 5],
+                num_filters=8,
+                d1=16,
+                d2=16,
+                batch_size=64,
+            )
+            rows = run_experiment_c_gohr(
+                cfg, n_train=200, n_val=50, n_test=50, epochs=2, verbose=False
+            )
+            self.assertEqual(len(rows), 2)
+            self.assertIn('roc_auc', rows[0])
+            self.assertTrue(os.path.exists(os.path.join(cfg.results_dir, 'exp_c_gohr_gohr_test.csv')))
 
 
 if __name__ == '__main__':
