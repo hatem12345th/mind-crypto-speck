@@ -48,6 +48,8 @@ speck-sight/
 ├── data/                          # Cached datasets (.npz)
 ├── checkpoints/                   # Best validation ResNet checkpoints (.pt)
 ├── results/                       # Experiment A & B metrics (.csv and .json)
+├── notebooks/
+│   └── mind_crypt_analysis.ipynb  # Interactive visualizations, sanity ablations & avalanche plots
 ├── run_all.py                     # Unified CLI runner for Part 1 (Tables 1-6)
 └── generate_dataset_and_test.py   # Lightweight smoke-test script
 ```

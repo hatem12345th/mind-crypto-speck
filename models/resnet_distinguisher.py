@@ -51,7 +51,8 @@ class ResNetDistinguisher(nn.Module):
         d1: int = 64,
         d2: int = 64,
         num_classes: int = 1,
-        word_size: int = 16
+        word_size: int = 16,
+        num_channels: int = 2
     ):
         super().__init__()
         self.num_filters = num_filters
@@ -60,7 +61,7 @@ class ResNetDistinguisher(nn.Module):
         self.d2 = d2
         self.num_classes = num_classes
         self.word_size = word_size
-        self.num_channels = 2  # Left and right words of 32-bit block
+        self.num_channels = num_channels  # 2 for single 32-bit block, 4 for 64-bit pair
 
         # Block 1: Bit-sliced expansion
         # Expands 2 input channels (L and R words) to num_filters using 1x1 conv
@@ -209,6 +210,7 @@ def save_checkpoint(
             'd2': model.d2,
             'num_classes': model.num_classes,
             'word_size': model.word_size,
+            'num_channels': model.num_channels,
         },
         'metadata': metadata or {},
     }
