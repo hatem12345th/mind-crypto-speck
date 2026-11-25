@@ -1,0 +1,17 @@
+table,scenario,train_round,train_key,eval_round,eval_key,accuracy,tpr,tnr,loss
+Table 1,"Same Round, Same Key",5,K1,5,K1,0.4984,0.8404,0.1563,0.6934
+Table 1,"Same Round, Different Key",5,K1,5,K2,0.4954,0.8385,0.1522,0.6935
+Table 1,"Same Round, Same Key",6,K1,6,K1,0.5004,0.0831,0.9177,0.6936
+Table 1,"Same Round, Different Key",6,K1,6,K2,0.4995,0.0791,0.92,0.6939
+Table 1,"Same Round, Same Key",21,K1,21,K1,0.4975,0.6422,0.3529,0.6933
+Table 1,"Same Round, Different Key",21,K1,21,K2,0.501,0.6494,0.3527,0.6932
+Table 1,"Same Round, Same Key",22,K1,22,K1,0.4954,0.4934,0.4973,0.6934
+Table 1,"Same Round, Different Key",22,K1,22,K2,0.4994,0.5058,0.493,0.6934
+Table 2,"Different Round, Same Key",5,K1,6,K1,0.4993,0.8442,0.1543,0.6936
+Table 3,"Different Round, Different Key",5,K1,6,K2,0.4975,0.8467,0.1483,0.6934
+Table 2,"Different Round, Same Key",6,K1,5,K1,0.499,0.0815,0.9164,0.6938
+Table 3,"Different Round, Different Key",6,K1,5,K2,0.4991,0.0805,0.9177,0.6936
+Table 2,"Different Round, Same Key",21,K1,22,K1,0.5038,0.647,0.3605,0.6932
+Table 3,"Different Round, Different Key",21,K1,22,K2,0.4975,0.6464,0.3485,0.6935
+Table 2,"Different Round, Same Key",22,K1,21,K1,0.4989,0.5009,0.4968,0.6933
+Table 3,"Different Round, Different Key",22,K1,21,K2,0.4995,0.5006,0.4983,0.6932

@@ -1,0 +1,27 @@
+# Byte-compiled / Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Generated datasets and model checkpoints (reproducible via run_all.py)
+data/*.npz
+data/*.npy
+checkpoints/*.pt
+checkpoints/*.pth
+
+# Temporary paper extraction scratch notes
+paper_notes/
+scratch/
+
+# Jupyter & IDE files
+.ipynb_checkpoints/
+.vscode/
+.idea/
+.DS_Store
