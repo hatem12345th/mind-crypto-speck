@@ -111,15 +111,23 @@ class CBCDatasetGenerator:
         samples_per_class: int,
         iv_mode: str = 'random',
         shuffle: bool = True,
-        return_raw_words: bool = False
+        return_raw_words: bool = False,
+        include_iv: bool = False
     ) -> Dict[str, np.ndarray]:
         """
         Generate balanced dataset for MIND-Crypt:
         samples_per_class from P1 (label 0)
         samples_per_class from P2 (label 1)
 
+        include_iv: if True, each sample is IV || C as a (2*N, 64) bit vector
+            (channels: iv_x, iv_y, c_x, c_y). In real CBC the IV is sent in the
+            clear, so this is the realistic adversary view. With include_iv=False
+            only C is given; for a uniformly random IV, C = E_K(P xor IV) is then
+            uniform for *every* P, so 50% accuracy is guaranteed by construction
+            regardless of the cipher or round count.
+
         Returns dictionary:
-            'X': (2*N, 32) binary array (uint8 or float32)
+            'X': (2*N, 32) binary array, or (2*N, 64) when include_iv=True
             'Y': (2*N,) labels array (uint8: 0 or 1)
             (Optional raw words 'cx', 'cy', 'iv_x', 'iv_y')
         """
@@ -128,12 +136,16 @@ class CBCDatasetGenerator:
 
         cx = np.concatenate([c1x, c2x])
         cy = np.concatenate([c1y, c2y])
+        ivx = np.concatenate([iv1x, iv2x])
+        ivy = np.concatenate([iv1y, iv2y])
         y = np.concatenate([
             np.zeros(samples_per_class, dtype=np.uint8),
             np.ones(samples_per_class, dtype=np.uint8)
         ])
 
         x_bits = convert_to_binary_32(cx, cy)
+        if include_iv:
+            x_bits = np.concatenate([convert_to_binary_32(ivx, ivy), x_bits], axis=1)
 
         if shuffle:
             perm = self.rng.permutation(len(y))
@@ -141,6 +153,8 @@ class CBCDatasetGenerator:
             y = y[perm]
             cx = cx[perm]
             cy = cy[perm]
+            ivx = ivx[perm]
+            ivy = ivy[perm]
 
         result = {
             'X': x_bits,
@@ -149,6 +163,8 @@ class CBCDatasetGenerator:
         if return_raw_words:
             result['cx'] = cx
             result['cy'] = cy
+            result['iv_x'] = ivx
+            result['iv_y'] = ivy
 
         return result
 
@@ -157,11 +173,12 @@ class CBCDatasetGenerator:
         train_samples_per_class: int,
         test_samples_per_class: int,
         val_samples_per_class: int = 0,
-        iv_mode: str = 'random'
+        iv_mode: str = 'random',
+        include_iv: bool = False
     ) -> Dict[str, np.ndarray]:
         """Generate train, val, and test partitions."""
-        train_data = self.generate_dataset(train_samples_per_class, iv_mode=iv_mode, shuffle=True)
-        test_data = self.generate_dataset(test_samples_per_class, iv_mode=iv_mode, shuffle=True)
+        train_data = self.generate_dataset(train_samples_per_class, iv_mode=iv_mode, shuffle=True, include_iv=include_iv)
+        test_data = self.generate_dataset(test_samples_per_class, iv_mode=iv_mode, shuffle=True, include_iv=include_iv)
 
         res = {
             'X_train': train_data['X'],
@@ -171,7 +188,7 @@ class CBCDatasetGenerator:
         }
 
         if val_samples_per_class > 0:
-            val_data = self.generate_dataset(val_samples_per_class, iv_mode=iv_mode, shuffle=True)
+            val_data = self.generate_dataset(val_samples_per_class, iv_mode=iv_mode, shuffle=True, include_iv=include_iv)
             res['X_val'] = val_data['X']
             res['y_val'] = val_data['Y']
 

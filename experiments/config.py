@@ -37,6 +37,9 @@ class ExperimentConfig:
     p1: Tuple[int, int] = (0x0000, 0x0000)
     p2: Tuple[int, int] = (0x0000, 0x0001)
     iv_mode: str = 'random'
+    # False: adversary sees C only (paper setting; 50% by construction with random IV).
+    # True: adversary sees IV || C, as in real CBC where the IV is transmitted.
+    include_iv: bool = False
     seed: int = 42
 
     # Dataset sizing (per class)
@@ -66,8 +69,18 @@ class ExperimentConfig:
     xgb_n_estimators: int = 100
     xgb_max_depth: int = 6
 
+    @property
+    def input_channels(self) -> int:
+        """16-bit words per sample: 2 (C) or 4 (IV || C)."""
+        return 4 if self.include_iv else 2
+
+    def _variant_suffix(self) -> str:
+        """Filename suffix so datasets/checkpoints of different modes and seeds never collide."""
+        mode = '_iv' if self.include_iv else ''
+        return f"{mode}_s{self.seed}"
+
     def dataset_path(self, rounds: int, key_name: str) -> str:
-        return f"{self.data_dir}/speck32_r{rounds}_{key_name.lower()}.npz"
+        return f"{self.data_dir}/speck32_r{rounds}_{key_name.lower()}{self._variant_suffix()}.npz"
 
     def checkpoint_path(self, rounds: int, key_name: str = 'K1') -> str:
-        return f"{self.checkpoint_dir}/resnet_r{rounds}_{key_name.lower()}.pt"
+        return f"{self.checkpoint_dir}/resnet_r{rounds}_{key_name.lower()}{self._variant_suffix()}.pt"

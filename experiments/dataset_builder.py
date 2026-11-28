@@ -81,6 +81,7 @@ def ensure_dataset(
         test_samples_per_class=n_test,
         val_samples_per_class=n_val,
         iv_mode=cfg.iv_mode,
+        include_iv=cfg.include_iv,
     )
     np.savez_compressed(filepath, **splits)
     if verbose:

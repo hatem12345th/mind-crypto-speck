@@ -6,7 +6,8 @@ import csv
 import json
 import math
 import os
-from typing import Any, Dict, List
+import statistics
+from typing import Any, Dict, List, Sequence
 
 
 def accuracy_significance(accuracy: float, n_test: int, z: float = 1.96) -> Dict[str, Any]:
@@ -38,6 +39,40 @@ def annotate_significance(rows: List[Dict[str, Any]], n_test: int) -> List[Dict[
     for row in rows:
         row.update(accuracy_significance(row['accuracy'], n_test))
     return rows
+
+
+METRIC_KEYS = (
+    'accuracy', 'tpr', 'tnr', 'loss', 'roc_auc', 'ci95_low', 'ci95_high',
+    'p_vs_chance', 'seconds', 'fit_seconds', 'cv_best_score', 'seed',
+)
+
+
+def summarize_over_seeds(rows: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """
+    Aggregate records from repeated runs (one record per seed and setting).
+
+    Records are grouped by every non-metric field (table, rounds, keys, sizes, ...)
+    and the accuracy is summarised as mean, sample std, min and max across seeds.
+    """
+    groups: Dict[tuple, List[Dict[str, Any]]] = {}
+    for row in rows:
+        key = tuple((k, v) for k, v in row.items() if k not in METRIC_KEYS)
+        groups.setdefault(key, []).append(row)
+
+    summary: List[Dict[str, Any]] = []
+    for key, members in groups.items():
+        accs = [float(m['accuracy']) for m in members]
+        rec: Dict[str, Any] = dict(key)
+        rec['n_seeds'] = len(accs)
+        rec['seeds'] = ' '.join(str(m.get('seed', '?')) for m in members)
+        rec['acc_mean'] = round(statistics.fmean(accs), 4)
+        rec['acc_std'] = round(statistics.stdev(accs), 4) if len(accs) > 1 else 0.0
+        rec['acc_min'] = round(min(accs), 4)
+        rec['acc_max'] = round(max(accs), 4)
+        if all('roc_auc' in m for m in members):
+            rec['auc_mean'] = round(statistics.fmean(float(m['roc_auc']) for m in members), 4)
+        summary.append(rec)
+    return summary
 
 
 def save_results(rows: List[Dict[str, Any]], json_path: str, csv_path: str) -> None:

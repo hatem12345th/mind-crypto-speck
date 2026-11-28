@@ -88,6 +88,7 @@ def _train_or_load_base_models(
             depth=cfg.depth,
             d1=cfg.d1,
             d2=cfg.d2,
+            num_channels=cfg.input_channels,
         )
         hist = train_model(
             model=model,

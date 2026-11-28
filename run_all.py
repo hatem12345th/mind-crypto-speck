@@ -10,7 +10,11 @@ Executes:
 """
 
 import argparse
+import dataclasses
+import os
 import time
+from typing import Any, Dict, List
+
 import torch
 
 from crypto.speck import check_speck_testvector
@@ -19,6 +23,7 @@ from experiments.dataset_builder import ensure_all_datasets
 from experiments.exp_a_deep_analyst import run_experiment_a
 from experiments.exp_b_transfer_analyst import run_experiment_b
 from experiments.exp_c_gohr_sweep import run_experiment_c_gohr
+from experiments.reporting import save_results, summarize_over_seeds
 
 
 def build_config_from_args(args: argparse.Namespace) -> ExperimentConfig:
@@ -79,6 +84,12 @@ def build_config_from_args(args: argparse.Namespace) -> ExperimentConfig:
         cfg.tune_xgb = True
     if args.tune_n_iter is not None:
         cfg.tune_n_iter = args.tune_n_iter
+    if args.include_iv:
+        cfg.include_iv = True
+        if args.results_tag is None:
+            cfg.results_tag = f"iv_{cfg.results_tag}"
+    if args.depth is not None:
+        cfg.depth = args.depth
 
     return cfg
 
@@ -118,7 +129,47 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--force-retrain', action='store_true', help="Retrain ResNet models even if checkpoints exist.")
     parser.add_argument('--skip-exp-a', action='store_true', help="Skip Experiment A (requires existing checkpoints).")
     parser.add_argument('--skip-exp-b', action='store_true', help="Skip Experiment B.")
+    parser.add_argument(
+        '--include-iv',
+        action='store_true',
+        help="Give the distinguisher IV || C (64 bits) instead of C alone. Realistic CBC adversary; "
+             "outputs are tagged 'iv_*'."
+    )
+    parser.add_argument('--depth', type=int, default=None, help="Number of residual blocks (Gohr 2019 uses 10; default 1).")
+    parser.add_argument(
+        '--seeds',
+        type=int,
+        nargs='+',
+        default=None,
+        help="Repeat the whole run for each seed (tags '<tag>_s<seed>') and write '<exp>_<tag>_seeds' "
+             "summaries with mean/std accuracy."
+    )
     return parser.parse_args()
+
+
+def run_once(cfg: ExperimentConfig, args: argparse.Namespace, device: torch.device) -> Dict[str, List[Dict[str, Any]]]:
+    """Run the selected experiments for one configuration and return their records."""
+    out: Dict[str, List[Dict[str, Any]]] = {}
+    if not (args.skip_exp_a and args.skip_exp_b):
+        ensure_all_datasets(cfg, force_regenerate=args.force_data, verbose=True)
+
+    if not args.skip_exp_a:
+        out['exp_a'] = run_experiment_a(cfg, device=device, force_retrain=args.force_retrain, verbose=True)
+
+    if not args.skip_exp_b:
+        out['exp_b'] = run_experiment_b(cfg, device=device, verbose=True)
+
+    if args.run_gohr:
+        out['exp_c_gohr'] = run_experiment_c_gohr(
+            cfg,
+            n_train=args.gohr_train_samples,
+            n_val=max(args.gohr_train_samples // 5, 2_000),
+            n_test=max(args.gohr_train_samples // 5, 2_000),
+            epochs=args.gohr_epochs,
+            device=device,
+            verbose=True,
+        )
+    return out
 
 
 def main() -> None:
@@ -130,30 +181,27 @@ def main() -> None:
     print("=" * 72)
     print(f"MIND-Crypt Runner | profile={args.profile} | tag={cfg.results_tag} | device={device}")
     print(f"Rounds: {cfg.rounds} | TL sample sizes/class: {cfg.tl_sample_sizes} | Tune XGB: {cfg.tune_xgb}")
+    print(f"Input: {'IV || C (64 bits)' if cfg.include_iv else 'C only (32 bits)'} | ResNet depth: {cfg.depth}")
     print("=" * 72)
 
     assert check_speck_testvector(), "SPECK32/64 NSA test vector verification failed!"
     print("[✓] SPECK32/64 NSA test vector verified.")
 
-    if not (args.skip_exp_a and args.skip_exp_b):
-        ensure_all_datasets(cfg, force_regenerate=args.force_data, verbose=True)
-
-    if not args.skip_exp_a:
-        run_experiment_a(cfg, device=device, force_retrain=args.force_retrain, verbose=True)
-
-    if not args.skip_exp_b:
-        run_experiment_b(cfg, device=device, verbose=True)
-
-    if args.run_gohr:
-        run_experiment_c_gohr(
-            cfg,
-            n_train=args.gohr_train_samples,
-            n_val=max(args.gohr_train_samples // 5, 2_000),
-            n_test=max(args.gohr_train_samples // 5, 2_000),
-            epochs=args.gohr_epochs,
-            device=device,
-            verbose=True,
-        )
+    if not args.seeds:
+        run_once(cfg, args, device)
+    else:
+        collected: Dict[str, List[Dict[str, Any]]] = {}
+        for seed in args.seeds:
+            print(f"\n{'#' * 72}\n# Seed {seed}\n{'#' * 72}")
+            cfg_s = dataclasses.replace(cfg, seed=seed, results_tag=f"{cfg.results_tag}_s{seed}")
+            for exp_name, rows in run_once(cfg_s, args, device).items():
+                for row in rows:
+                    collected.setdefault(exp_name, []).append({**row, 'seed': seed})
+        for exp_name, rows in collected.items():
+            summary = summarize_over_seeds(rows)
+            base = os.path.join(cfg.results_dir, f"{exp_name}_{cfg.results_tag}_seeds")
+            save_results(summary, json_path=base + '.json', csv_path=base + '.csv')
+            print(f"[seeds] Wrote {len(summary)} summary rows -> {base}.csv")
 
     print(f"\nCompleted MIND-Crypt run in {time.time() - t_start:.2f}s.")
     print(f"Saved results in '{cfg.results_dir}/' and checkpoints in '{cfg.checkpoint_dir}/'.")
