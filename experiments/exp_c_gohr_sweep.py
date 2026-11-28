@@ -21,7 +21,7 @@ from models.resnet_distinguisher import (
     train_model,
 )
 from .config import ExperimentConfig
-from .reporting import print_table, save_results
+from .reporting import accuracy_significance, print_table, save_results
 
 
 def _compute_roc_auc(model: ResNetDistinguisher, loader, device: torch.device) -> float:
@@ -112,6 +112,8 @@ def run_experiment_c_gohr(
             'loss': round(metrics['loss'], 4),
             'seconds': round(elapsed, 2),
         })
+        sig = accuracy_significance(records[-1]['accuracy'], n_test)
+        records[-1].update({k: v for k, v in sig.items() if k != 'n_test'})
         table_rows.append([
             r,
             f"{metrics['accuracy']:.4f}",

@@ -1,8 +1,14 @@
 """
 PyTorch 1D Residual Neural Network (ResNet) Distinguisher for MIND-Crypt.
 
-Replicates the architecture adapted from Christoph Gohr (CRYPTO 2019)
-and evaluated in MIND-Crypt (arXiv:2405.19683).
+Follows the architecture family of Christoph Gohr (CRYPTO 2019) as used in
+MIND-Crypt (arXiv:2405.19683): 1x1 bit-sliced convolution, a residual tower of
+kernel-3 Conv1D blocks, and a two-layer dense head.
+
+Note on capacity: this project defaults to depth=1 (one residual block),
+whereas Gohr's published distinguishers use depth=10 trained on ~10^7 samples.
+Accuracies from the default configuration are therefore lower bounds and are
+not directly comparable to Gohr's reported numbers.
 """
 
 import os
@@ -42,6 +48,9 @@ class ResNetDistinguisher(nn.Module):
 
     Takes 32-bit binary ciphertext vectors, reshapes into (batch, 2 channels, 16 bits),
     processes through 1D Conv + Residual Tower, and extracts features for XGBoost or predicts class.
+    With num_channels=4 it accepts 64-bit ciphertext pairs (Gohr's differential setting).
+
+    `depth` is the number of residual blocks (Gohr 2019 uses 10; default here is 1).
     """
 
     def __init__(

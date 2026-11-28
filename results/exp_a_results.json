@@ -9,7 +9,11 @@
     "accuracy": 0.4984,
     "tpr": 0.8404,
     "tnr": 0.1563,
-    "loss": 0.6934
+    "loss": 0.6934,
+    "n_test": 20000,
+    "ci95_low": 0.4915,
+    "ci95_high": 0.5053,
+    "p_vs_chance": 0.651
   },
   {
     "table": "Table 1",
@@ -21,7 +25,11 @@
     "accuracy": 0.4954,
     "tpr": 0.8385,
     "tnr": 0.1522,
-    "loss": 0.6935
+    "loss": 0.6935,
+    "n_test": 20000,
+    "ci95_low": 0.4885,
+    "ci95_high": 0.5023,
+    "p_vs_chance": 0.193
   },
   {
     "table": "Table 1",
@@ -33,7 +41,11 @@
     "accuracy": 0.5004,
     "tpr": 0.0831,
     "tnr": 0.9177,
-    "loss": 0.6936
+    "loss": 0.6936,
+    "n_test": 20000,
+    "ci95_low": 0.4935,
+    "ci95_high": 0.5073,
+    "p_vs_chance": 0.91
   },
   {
     "table": "Table 1",
@@ -45,7 +57,11 @@
     "accuracy": 0.4995,
     "tpr": 0.0791,
     "tnr": 0.92,
-    "loss": 0.6939
+    "loss": 0.6939,
+    "n_test": 20000,
+    "ci95_low": 0.4926,
+    "ci95_high": 0.5064,
+    "p_vs_chance": 0.888
   },
   {
     "table": "Table 1",
@@ -57,7 +73,11 @@
     "accuracy": 0.4975,
     "tpr": 0.6422,
     "tnr": 0.3529,
-    "loss": 0.6933
+    "loss": 0.6933,
+    "n_test": 20000,
+    "ci95_low": 0.4906,
+    "ci95_high": 0.5044,
+    "p_vs_chance": 0.48
   },
   {
     "table": "Table 1",
@@ -69,7 +89,11 @@
     "accuracy": 0.501,
     "tpr": 0.6494,
     "tnr": 0.3527,
-    "loss": 0.6932
+    "loss": 0.6932,
+    "n_test": 20000,
+    "ci95_low": 0.4941,
+    "ci95_high": 0.5079,
+    "p_vs_chance": 0.777
   },
   {
     "table": "Table 1",
@@ -81,7 +105,11 @@
     "accuracy": 0.4954,
     "tpr": 0.4934,
     "tnr": 0.4973,
-    "loss": 0.6934
+    "loss": 0.6934,
+    "n_test": 20000,
+    "ci95_low": 0.4885,
+    "ci95_high": 0.5023,
+    "p_vs_chance": 0.193
   },
   {
     "table": "Table 1",
@@ -93,7 +121,11 @@
     "accuracy": 0.4994,
     "tpr": 0.5058,
     "tnr": 0.493,
-    "loss": 0.6934
+    "loss": 0.6934,
+    "n_test": 20000,
+    "ci95_low": 0.4925,
+    "ci95_high": 0.5063,
+    "p_vs_chance": 0.865
   },
   {
     "table": "Table 2",
@@ -105,7 +137,11 @@
     "accuracy": 0.4993,
     "tpr": 0.8442,
     "tnr": 0.1543,
-    "loss": 0.6936
+    "loss": 0.6936,
+    "n_test": 20000,
+    "ci95_low": 0.4924,
+    "ci95_high": 0.5062,
+    "p_vs_chance": 0.843
   },
   {
     "table": "Table 3",
@@ -117,7 +153,11 @@
     "accuracy": 0.4975,
     "tpr": 0.8467,
     "tnr": 0.1483,
-    "loss": 0.6934
+    "loss": 0.6934,
+    "n_test": 20000,
+    "ci95_low": 0.4906,
+    "ci95_high": 0.5044,
+    "p_vs_chance": 0.48
   },
   {
     "table": "Table 2",
@@ -129,7 +169,11 @@
     "accuracy": 0.499,
     "tpr": 0.0815,
     "tnr": 0.9164,
-    "loss": 0.6938
+    "loss": 0.6938,
+    "n_test": 20000,
+    "ci95_low": 0.4921,
+    "ci95_high": 0.5059,
+    "p_vs_chance": 0.777
   },
   {
     "table": "Table 3",
@@ -141,7 +185,11 @@
     "accuracy": 0.4991,
     "tpr": 0.0805,
     "tnr": 0.9177,
-    "loss": 0.6936
+    "loss": 0.6936,
+    "n_test": 20000,
+    "ci95_low": 0.4922,
+    "ci95_high": 0.506,
+    "p_vs_chance": 0.799
   },
   {
     "table": "Table 2",
@@ -153,7 +201,11 @@
     "accuracy": 0.5038,
     "tpr": 0.647,
     "tnr": 0.3605,
-    "loss": 0.6932
+    "loss": 0.6932,
+    "n_test": 20000,
+    "ci95_low": 0.4969,
+    "ci95_high": 0.5107,
+    "p_vs_chance": 0.282
   },
   {
     "table": "Table 3",
@@ -165,7 +217,11 @@
     "accuracy": 0.4975,
     "tpr": 0.6464,
     "tnr": 0.3485,
-    "loss": 0.6935
+    "loss": 0.6935,
+    "n_test": 20000,
+    "ci95_low": 0.4906,
+    "ci95_high": 0.5044,
+    "p_vs_chance": 0.48
   },
   {
     "table": "Table 2",
@@ -177,7 +233,11 @@
     "accuracy": 0.4989,
     "tpr": 0.5009,
     "tnr": 0.4968,
-    "loss": 0.6933
+    "loss": 0.6933,
+    "n_test": 20000,
+    "ci95_low": 0.492,
+    "ci95_high": 0.5058,
+    "p_vs_chance": 0.756
   },
   {
     "table": "Table 3",
@@ -189,6 +249,10 @@
     "accuracy": 0.4995,
     "tpr": 0.5006,
     "tnr": 0.4983,
-    "loss": 0.6932
+    "loss": 0.6932,
+    "n_test": 20000,
+    "ci95_low": 0.4926,
+    "ci95_high": 0.5064,
+    "p_vs_chance": 0.888
   }
 ]

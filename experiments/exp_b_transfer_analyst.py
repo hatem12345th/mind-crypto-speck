@@ -18,7 +18,7 @@ from transfer.feature_extractor import extract_latent_features
 from transfer.xgboost_eval import train_and_eval_xgboost
 from .config import ExperimentConfig
 from .dataset_builder import load_dataset_splits
-from .reporting import print_table, save_results
+from .reporting import annotate_significance, print_table, save_results
 
 
 def _evaluate_tl_pair(
@@ -173,6 +173,7 @@ def run_experiment_b(
         )
     all_records.extend(t6_records)
 
+    annotate_significance(all_records, n_test=2 * cfg.tl_test_per_class)
     save_results(
         all_records,
         json_path=os.path.join(cfg.results_dir, f'exp_b_{cfg.results_tag}.json'),

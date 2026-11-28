@@ -10,7 +10,10 @@
     "tnr": 1.0,
     "roc_auc": 1.0,
     "loss": 0.0177,
-    "seconds": 12.37
+    "seconds": 12.37,
+    "ci95_low": 0.9996,
+    "ci95_high": 1.0,
+    "p_vs_chance": 0.0
   },
   {
     "rounds": 2,
@@ -23,7 +26,10 @@
     "tnr": 0.9988,
     "roc_auc": 1.0,
     "loss": 0.0166,
-    "seconds": 12.56
+    "seconds": 12.56,
+    "ci95_low": 0.9987,
+    "ci95_high": 0.9997,
+    "p_vs_chance": 0.0
   },
   {
     "rounds": 3,
@@ -36,7 +42,10 @@
     "tnr": 0.9938,
     "roc_auc": 0.9999,
     "loss": 0.0315,
-    "seconds": 11.9
+    "seconds": 11.9,
+    "ci95_low": 0.9948,
+    "ci95_high": 0.9972,
+    "p_vs_chance": 0.0
   },
   {
     "rounds": 4,
@@ -49,7 +58,10 @@
     "tnr": 0.9782,
     "roc_auc": 0.9855,
     "loss": 0.1426,
-    "seconds": 11.97
+    "seconds": 11.97,
+    "ci95_low": 0.9442,
+    "ci95_high": 0.9529,
+    "p_vs_chance": 0.0
   },
   {
     "rounds": 5,
@@ -62,7 +74,10 @@
     "tnr": 0.9178,
     "roc_auc": 0.9152,
     "loss": 0.3432,
-    "seconds": 11.89
+    "seconds": 11.89,
+    "ci95_low": 0.8519,
+    "ci95_high": 0.8656,
+    "p_vs_chance": 0.0
   },
   {
     "rounds": 6,
@@ -75,7 +90,10 @@
     "tnr": 0.7794,
     "roc_auc": 0.7021,
     "loss": 0.6144,
-    "seconds": 12.5
+    "seconds": 12.5,
+    "ci95_low": 0.6524,
+    "ci95_high": 0.6709,
+    "p_vs_chance": 1.92e-229
   },
   {
     "rounds": 7,
@@ -88,7 +106,10 @@
     "tnr": 0.2136,
     "roc_auc": 0.5058,
     "loss": 0.6932,
-    "seconds": 7.94
+    "seconds": 7.94,
+    "ci95_low": 0.493,
+    "ci95_high": 0.5126,
+    "p_vs_chance": 0.575
   },
   {
     "rounds": 8,
@@ -101,7 +122,10 @@
     "tnr": 0.7174,
     "roc_auc": 0.5117,
     "loss": 0.6933,
-    "seconds": 9.18
+    "seconds": 9.18,
+    "ci95_low": 0.4996,
+    "ci95_high": 0.5192,
+    "p_vs_chance": 0.0601
   },
   {
     "rounds": 9,
@@ -114,7 +138,10 @@
     "tnr": 0.3936,
     "roc_auc": 0.499,
     "loss": 0.6933,
-    "seconds": 7.51
+    "seconds": 7.51,
+    "ci95_low": 0.4911,
+    "ci95_high": 0.5107,
+    "p_vs_chance": 0.857
   },
   {
     "rounds": 10,
@@ -127,7 +154,10 @@
     "tnr": 0.3392,
     "roc_auc": 0.4983,
     "loss": 0.6936,
-    "seconds": 7.72
+    "seconds": 7.72,
+    "ci95_low": 0.4906,
+    "ci95_high": 0.5102,
+    "p_vs_chance": 0.936
   },
   {
     "rounds": 11,
@@ -140,7 +170,10 @@
     "tnr": 0.0572,
     "roc_auc": 0.5002,
     "loss": 0.6955,
-    "seconds": 8.95
+    "seconds": 8.95,
+    "ci95_low": 0.4881,
+    "ci95_high": 0.5077,
+    "p_vs_chance": 0.674
   },
   {
     "rounds": 12,
@@ -153,7 +186,10 @@
     "tnr": 0.5622,
     "roc_auc": 0.4971,
     "loss": 0.6934,
-    "seconds": 7.47
+    "seconds": 7.47,
+    "ci95_low": 0.486,
+    "ci95_high": 0.5056,
+    "p_vs_chance": 0.401
   },
   {
     "rounds": 13,
@@ -166,7 +202,10 @@
     "tnr": 0.3654,
     "roc_auc": 0.4901,
     "loss": 0.6947,
-    "seconds": 9.24
+    "seconds": 9.24,
+    "ci95_low": 0.4811,
+    "ci95_high": 0.5007,
+    "p_vs_chance": 0.0688
   },
   {
     "rounds": 14,
@@ -179,7 +218,10 @@
     "tnr": 0.5252,
     "roc_auc": 0.5001,
     "loss": 0.6936,
-    "seconds": 9.01
+    "seconds": 9.01,
+    "ci95_low": 0.4903,
+    "ci95_high": 0.5099,
+    "p_vs_chance": 0.984
   },
   {
     "rounds": 15,
@@ -192,7 +234,10 @@
     "tnr": 0.2664,
     "roc_auc": 0.496,
     "loss": 0.6943,
-    "seconds": 8.94
+    "seconds": 8.94,
+    "ci95_low": 0.4887,
+    "ci95_high": 0.5083,
+    "p_vs_chance": 0.764
   },
   {
     "rounds": 16,
@@ -205,7 +250,10 @@
     "tnr": 0.9992,
     "roc_auc": 0.5014,
     "loss": 0.6944,
-    "seconds": 7.56
+    "seconds": 7.56,
+    "ci95_low": 0.4903,
+    "ci95_high": 0.5099,
+    "p_vs_chance": 0.984
   },
   {
     "rounds": 17,
@@ -218,7 +266,10 @@
     "tnr": 0.9856,
     "roc_auc": 0.4983,
     "loss": 0.6939,
-    "seconds": 7.47
+    "seconds": 7.47,
+    "ci95_low": 0.4878,
+    "ci95_high": 0.5074,
+    "p_vs_chance": 0.631
   },
   {
     "rounds": 18,
@@ -231,7 +282,10 @@
     "tnr": 0.2462,
     "roc_auc": 0.5013,
     "loss": 0.694,
-    "seconds": 8.97
+    "seconds": 8.97,
+    "ci95_low": 0.4923,
+    "ci95_high": 0.5119,
+    "p_vs_chance": 0.674
   },
   {
     "rounds": 19,
@@ -244,7 +298,10 @@
     "tnr": 0.7758,
     "roc_auc": 0.4917,
     "loss": 0.6936,
-    "seconds": 7.65
+    "seconds": 7.65,
+    "ci95_low": 0.4855,
+    "ci95_high": 0.5051,
+    "p_vs_chance": 0.347
   },
   {
     "rounds": 20,
@@ -257,7 +314,10 @@
     "tnr": 0.0844,
     "roc_auc": 0.4977,
     "loss": 0.6935,
-    "seconds": 8.13
+    "seconds": 8.13,
+    "ci95_low": 0.4908,
+    "ci95_high": 0.5104,
+    "p_vs_chance": 0.904
   },
   {
     "rounds": 21,
@@ -270,7 +330,10 @@
     "tnr": 0.833,
     "roc_auc": 0.5016,
     "loss": 0.6935,
-    "seconds": 7.87
+    "seconds": 7.87,
+    "ci95_low": 0.4899,
+    "ci95_high": 0.5095,
+    "p_vs_chance": 0.952
   },
   {
     "rounds": 22,
@@ -283,6 +346,9 @@
     "tnr": 0.915,
     "roc_auc": 0.4952,
     "loss": 0.6937,
-    "seconds": 7.64
+    "seconds": 7.64,
+    "ci95_low": 0.4918,
+    "ci95_high": 0.5114,
+    "p_vs_chance": 0.749
   }
 ]

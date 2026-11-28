@@ -22,7 +22,7 @@ from models.resnet_distinguisher import (
 )
 from .config import ExperimentConfig
 from .dataset_builder import load_dataset_splits
-from .reporting import print_table, save_results
+from .reporting import annotate_significance, print_table, save_results
 
 
 def _eval_model_on_target(
@@ -207,6 +207,7 @@ def run_experiment_a(
             f"{m_diff_key['accuracy']:.4f}", f"{m_diff_key['tpr']:.4f}", f"{m_diff_key['tnr']:.4f}",
         ])
 
+    annotate_significance(records, n_test=2 * cfg.dl_test_per_class)
     save_results(
         records,
         json_path=os.path.join(cfg.results_dir, f'exp_a_{cfg.results_tag}.json'),

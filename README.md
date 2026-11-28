@@ -8,9 +8,9 @@ A reproduction, full 22-round evaluation, and ablation framework for **MIND-Cryp
 
 ## Environment Setup
 
-### Option A: Pre-configured Environment
+### Option A: Existing Virtual Environment
 ```bash
-source ../venv/bin/activate
+source venv/bin/activate   # adjust the path if your venv lives elsewhere
 ```
 
 ### Option B: Fresh Virtual Environment
@@ -20,14 +20,14 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Verified with Python 3.13 (`torch 2.15.0`, `xgboost 3.4.1`, `scikit-learn 1.9.1`, `scipy 1.18.1`, `numpy 2.5.4`, `pandas 3.0.6`, `matplotlib 3.11.2`, `seaborn 0.13.2`).
+Verified with Python 3.13; core versions are pinned in `requirements.txt` (`torch 2.15.0`, `xgboost 3.4.1`, `scikit-learn 1.9.1`, `scipy 1.18.1`, `numpy 2.5.4`, `pandas 3.0.6`, `matplotlib 3.11.2`, `seaborn 0.13.2`).
 
 ---
 
 ## Project Architecture
 
 ```
-speck-sight/
+mind-crypto-speck/
 ├── crypto/
 │   ├── speck.py                   # SPECK32/64 implementation (verified against NSA test vectors)
 │   ├── cbc_generator.py           # Vectorized CBC mode dataset generator (random/fixed/counter IV)
@@ -44,7 +44,7 @@ speck-sight/
 │   ├── exp_a_deep_analyst.py      # Experiment A: DeepAnalyst (Tables 1, 2, 3)
 │   ├── exp_b_transfer_analyst.py  # Experiment B: TransferAnalyst (Tables 4, 5, 6)
 │   ├── exp_c_gohr_sweep.py        # Experiment C: Gohr differential distinguisher round sweep
-│   └── reporting.py               # ASCII table printing and JSON/CSV export
+│   └── reporting.py               # ASCII tables, JSON/CSV export, 95% CIs & p-values vs. chance
 ├── notebooks/
 │   └── mind_crypt_analysis.ipynb  # Executed notebook with plots, ROC curves, ablations & avalanche heatmap
 ├── results/
@@ -57,6 +57,7 @@ speck-sight/
 │   ├── test_crypto.py             # Cryptographic and CBC dataset unit tests
 │   ├── test_model.py              # PyTorch ResNet model tests
 │   ├── test_transfer.py           # Transfer learning pipeline tests
+│   ├── test_reporting.py          # Confidence interval / significance helper tests
 │   └── test_experiments.py        # Cyclic LR, checkpointing, tuning, Gohr & pipeline tests
 ├── data/                          # Cached datasets (.npz, gitignored)
 ├── checkpoints/                   # Best validation ResNet checkpoints (.pt, gitignored)
@@ -69,9 +70,9 @@ speck-sight/
 
 ## Running Tests, Experiments & Notebook
 
-### 1. Run Complete Unit & Integration Test Suite (19 tests)
+### 1. Run Complete Unit & Integration Test Suite (25 tests)
 ```bash
-source ../venv/bin/activate
+source venv/bin/activate
 python -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
@@ -106,7 +107,15 @@ jupyter lab notebooks/mind_crypt_analysis.ipynb
 | **Random-IV CBC (DeepAnalyst & TransferAnalyst)** | `1 → 22` | `0.4909 – 0.5072` | Uniform random 32-bit IVs blind single-block plaintexts; ciphertexts remain indistinguishable from random guessing on unseen splits (while training accuracy climbs via memorization). |
 | **Fixed-IV CBC / ECB (Sanity Check)** | `5` | `1.0000` | Without random IVs, deterministic ciphertexts separate trivially. |
 | **Gohr Differential (`Δ=(0x0040, 0)`, random keys)** | `1 → 6` | `1.0000 → 0.6617` | The same `ResNetDistinguisher` (`num_channels=4`) learns real ARX differential trails across unseen random keys (`R=1: 1.000`, `R=4: 0.949`, `R=5: 0.859`, `R=6: 0.662`). |
-| **Gohr Differential (`Δ=(0x0040, 0)`, random keys)** | `7 → 22` | `0.4909 – 0.5094` | Differential bias vanishes to the chance baseline from Round 7 onward (at 50k training samples), matching the ~round-6 saturation observed in the 22-round avalanche sweep. |
+| **Gohr Differential (`Δ=(0x0040, 0)`, random keys)** | `7 → 22` | `0.4909 – 0.5094` | No differential bias **detected** from Round 7 onward with this budget (depth-1 ResNet, 50k training pairs, 8 epochs; every round has p > 0.05 vs. chance). This is a limit of the setup, not proof that the bias vanishes: Gohr (2019) reports ≈0.93 / 0.79 / 0.62 for rounds 5 / 6 / 7 using a depth-10 ResNet trained on 10⁷ samples. |
+
+### Statistical significance
+
+Every result record (CSV/JSON in `results/`) includes `n_test`, a Wilson 95% confidence interval (`ci95_low`, `ci95_high`) and a two-sided binomial p-value against the 0.5 chance baseline (`p_vs_chance`). As a rule of thumb, chance alone moves accuracy by about ±0.007 at `n_test = 20,000` and about ±0.010 at `n_test = 10,000`.
+
+* **Gohr rounds 1–6** are significant beyond doubt (p < 10⁻²⁰⁰).
+* **Random-IV CBC:** 7 of the ~200 DeepAnalyst/TransferAnalyst evaluations have p < 0.05. That is no more than the ~5% expected from multiple testing alone, and none survives a Bonferroni correction, so the CBC results are consistent with chance at every round.
+* All runs use a single seed; repeating them across seeds would narrow the remaining uncertainty.
 
 ---
 
